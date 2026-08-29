@@ -179,6 +179,68 @@ def _notify_shell(folder: Path) -> None:
         pass
 
 
+def read_folder_icon(folder: str | Path) -> tuple[Path, int] | None:
+    """Read a customized folder's icon from its ``desktop.ini``.
+
+    Returns ``(resolved_icon_path, index)`` or ``None`` if the folder has no
+    IconResource entry.
+    """
+    folder = Path(folder).resolve()
+    ini = folder / "desktop.ini"
+    if not ini.exists():
+        return None
+    try:
+        indata = ini.read_text(encoding="utf-8-sig", errors="replace")
+    except OSError:
+        return None
+    for raw in indata.splitlines():
+        line = raw.strip()
+        if line.lower().startswith("iconresource="):
+            value = line.split("=", 1)[1]
+            path_part, _, idx_part = value.partition(",")
+            path_part = path_part.strip().strip('"')
+            icon = Path(path_part)
+            if not icon.is_absolute():
+                icon = (folder / icon).resolve()
+            else:
+                icon = icon.resolve()
+            if not icon.exists():
+                return None
+            try:
+                idx = int(idx_part) if idx_part.strip() else 0
+            except ValueError:
+                idx = 0
+            return icon, idx
+    return None
+
+
+def copy_folder_style(source: str | Path, targets: list[str | Path]) -> tuple[int, list[str]]:
+    """Clone one customized folder's icon onto many others.
+
+    Returns ``(folders_customized, errors)``. The source folder must already
+    be customized (have a ``desktop.ini`` with ``IconResource``); its icon file
+    is copied into each target just like a normal apply.
+    """
+    source = Path(source).resolve()
+    icon_info = read_folder_icon(source)
+    if icon_info is None:
+        raise FileNotFoundError(
+            f"‘{source.name}’ has no customized icon. Style a source folder first."
+        )
+    icon, index = icon_info
+
+    customized = 0
+    errors: list[str] = []
+    for t in targets:
+        t = Path(t)
+        try:
+            customize_folder_icon(t, icon, index=index)
+            customized += 1
+        except Exception as exc:  # noqa: BLE001
+            errors.append(f"{t}: {exc}")
+    return customized, errors
+
+
 def reset_folder_icon(folder: str | Path) -> bool:
     """Remove desktop.ini and its attributes, returning to the default icon."""
     folder = Path(folder).resolve()

@@ -33,7 +33,14 @@ def main() -> int:
     app.setApplicationName("Folder & Icon Customizer")
     app.setStyleSheet(APP_STYLESHEET)
 
-    window = MainWindow()
+    # Optional folder argument (from the Explorer right-click menu).
+    target_folder = None
+    for arg in sys.argv[1:]:
+        if arg and Path(arg).is_dir():
+            target_folder = arg
+            break
+
+    window = MainWindow(initial_folder=target_folder)
     window.show()
 
     if sys.platform != "win32":

@@ -4,9 +4,11 @@ A polished Windows GUI application for customizing folder icons, built with Pyth
 
 ## ✨ Features
 
-- **🎨 Customize Folders** — Apply `.ico`, `.png`, or `.jpg` icons to folders (or recursively to all subfolders) using `desktop.ini`. Includes an icon-index slider and a built-in icon suite picker.
+- **🎨 Customize Folders** — Apply `.ico`, `.png`, or `.jpg` icons to folders (batch: many at once, or recursively to all subfolders) using `desktop.ini`. Includes an icon-index slider and a built-in icon suite picker.
 - **🔄 Image → ICO Converter** — Batch-convert PNG, JPG, and BMP images into multi-resolution Windows icons (16–256 px) to grow your library.
-- **📚 Icon Library** — Browse and preview your icons with a clean gallery view. Double-click for a large preview or apply directly to a folder.
+- **📚 Icon Library** — Browse and preview your icons with a clean gallery view. Double-click for a large preview or apply directly to a folder. Import shared icon packs here too.
+- **✨ Icon Studio** — Design icons from scratch: solid/gradient/pattern fills, an optional base image, effects (shadow, glow, border, corner radius, opacity, blur), and a text/emoji overlay with a live preview. Export as PNG/ICO, save as a preset, or export a shareable pack.
+- **💾 Presets & Theme Packs** — Save your looks for reuse, load built-in theme packs (Neon, Ocean, Sunset, …), and share them with others via pack import/export (.icp / .zip).
 
 ## 🖥️ Requirements
 
